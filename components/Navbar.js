@@ -68,12 +68,13 @@ const Navbar = ({ isHome }) => {
   const {  handleSignMsg } = useSuiWallet();
   const { status, connected, connecting,disconnect, account, network, name } = useWallet();
   const { ethAddress, isConnected: ethConnected, onSignMessageEth } = useEthWallet();
-  const { solconnected, solpublickey, onSignMessageSol } = useSolWallet();
+  const { solconnected, solPublicKey, OnSignMessageSol } = useSolWallet();
 
   const [showsignbuttoneth, setshowsignbuttoneth] = useState(false);
   const [showsignbuttonaptos, setshowsignbuttonaptos] = useState(false);
   const [showsignbuttonsui, setshowsignbuttonsui] = useState(false);
   const [showsignbuttonsol, setshowsignbuttonsol] = useState(false);
+  const solAccount = solPublicKey;
   
   console.log("sui connected", status == "connected")
   useEffect(() => {
@@ -126,6 +127,15 @@ const Navbar = ({ isHome }) => {
   const token = Cookies.get("erebrus_token");
 
   
+
+  useEffect(() => {
+    if (solAccount) {
+      // Update the cookie with the new address
+      Cookies.set("erebrus_wallet", solAccount);
+    
+
+    }
+  }, [solAccount]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -349,7 +359,7 @@ const Navbar = ({ isHome }) => {
               {solconnected && showsignbuttonsol && (
                 <Button
                   color={"blue"}
-                  onClick={onSignMessageSol}
+                  onClick={OnSignMessageSol}
                   disabled={false}
                   message={"Authenticate"}
                 />
